@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from alfaapp import views
 urlpatterns = [
-    path('',views.home),
+    path('',views.home, name= 'index'),
     path('admin/', admin.site.urls),
-    path('ativos',include('alfaapp.urls'))
+    path('ativos/',include('alfaapp.urls'))
 ]

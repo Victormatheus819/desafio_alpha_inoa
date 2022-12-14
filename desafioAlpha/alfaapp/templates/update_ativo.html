@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>{{ativo.sigla}}</div>{{}}
+    <form action="{% url 'novo_ativo' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+       <div>Preço Maximo:</div> 
+       <input type="number" step="0.10" value="{{ativo.Praco_max}}">
+       <div>Preço Minimo:</div> 
+       <input type="number" step="0.10" value="{{ativo.preco_min}}">  
+       <div>Intervalo de procura:</div> 
+       <input type="number" step="0.10" value="{{ativo.preco_min}}">
+       <input type="submit" value="Salvar "> 
+
+    </form>
+</body>
+</html>
