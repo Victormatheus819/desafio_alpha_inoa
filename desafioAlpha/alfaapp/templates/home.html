@@ -11,7 +11,7 @@
     <p>{{ message }}</p>
     <ul>
         {% for ativo in ativos %}
-            <li><a href="{% url 'delete_ativo' ativo.sigla %}"></a> {{ ativo.sigla }}/<a href="{% url 'delete_ativo' ativo.sigla %}">delete</a>/ </li>
+            <li><a href="{% url 'update_ativo' ativo.sigla %}">{{ ativo.sigla }}</a> /<a href="{% url 'delete_ativo' ativo.sigla %}">delete</a>/ </li>
         {% endfor %}
     </ul>
     <br>
