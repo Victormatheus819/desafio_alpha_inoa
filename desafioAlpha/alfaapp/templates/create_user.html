@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{% url 'create_user'  %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+       <div>Preço Maximo:</div> 
+       <input name="preco_max" type="number" step="0.10" value="{{ativo.preco_max}}">
+       <div>Preço Minimo:</div> 
+       <input name="preco_min" type="number" step="0.10" value="{{ativo.preco_min}}">  
+       <div>Intervalo de procura(min):</div> 
+       <input name="search_interval"   type="number" step="0.10" value="{{ativo.search_interval}}">
+       <input type="submit" value="Salvar "> 
+
+    </form>
+</body>
+</html>
