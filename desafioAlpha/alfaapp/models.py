@@ -8,7 +8,7 @@ class Ativos (models.Model):
     preco_min = models.FloatField()
     cotacao = models.FloatField(null=True)
     search_interval=models.FloatField()
-    cycleRequisition= cycleRequisition
+    switch_off_thread= models.BooleanField(null=True)
 
 class Usuario (models.Model):
     nome= models.CharField(max_length=60)
