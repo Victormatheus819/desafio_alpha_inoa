@@ -8,6 +8,8 @@
 <body>
     
     {% block main %}
+    {% if user.is_authenticated %}
+    <p>Bem vindo {{user.username  }}</p>
     <p>{{ message }}</p>
     <ul>
         {% for ativo in ativos %}
@@ -15,10 +17,13 @@
         {% endfor %}
     </ul>
     <br>
-    <a href="{% url 'novo_ativo' %}">Registrar novo ativo</a>
-    {% endblock %}
+    <a href="{% url 'novo_ativo'  %}">Registrar novo ativo</a>
+    {%else%}
+       <a href="{% url 'login' %}">Por favor faça o login para ver a pagina</a>
+    {%endif%}
            
     {% block footer %}
+    {% endblock %}
     {% endblock %}
 </body>
 </html>

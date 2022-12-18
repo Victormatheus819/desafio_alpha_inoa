@@ -5,11 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+   
     <form action="{% url 'create_user'  %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
+        <div>Nome:</div> 
+       <input name="username" type="text" >
        <div>Email:</div> 
-       <input name="preco_max" type="email" >
+       <input name="email" type="email" >
        <div>Senha:</div> 
        <input name="password" type="password'">  
        <input type="submit" value="Salvar "> 

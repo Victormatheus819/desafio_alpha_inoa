@@ -11,13 +11,12 @@
   <body>
       
     {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <p>Seu usuario e senha não foram achados. Por favor tente de novo.</p>
   {% endif %}
 
   {% if next %}
     {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
+      <p>Sua conta não tem acesso a essa página.</p>
     {% else %}
       <p>Please login to see this page.</p>
     {% endif %}
@@ -40,8 +39,8 @@
   </form>
 
   {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>     
-  
+  <p><a href="{% url 'create_user' %}">Crie um registro</a></p>
+  <p><a href="{% url 'password_reset' %}">Perdeu sua senha?</a></p>     
       
   </body>
   </html>
