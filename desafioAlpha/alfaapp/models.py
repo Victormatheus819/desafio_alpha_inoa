@@ -9,6 +9,8 @@ class Ativos (models.Model):
     cotacao = models.FloatField(null=True)
     search_interval=models.FloatField()
     switch_off_thread= models.BooleanField(null=True)
+    email_venda=models.BooleanField(null=True,default=False)
+    email_compra=models.BooleanField(null=True,default=False)
 
 class Usuario (models.Model):
     nome= models.CharField(max_length=60)
