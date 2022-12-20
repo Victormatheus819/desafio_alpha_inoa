@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ativo.sigla}}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %} Home de Ativos {% endblock %}
+{% block main %}
     <div>{{ativo.sigla}}</div>
     <form action="{% url 'update_ativo' ativo.sigla %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
+        <div class="form-group">
        <div>Preço Maximo:</div> 
-       <input name="preco_max" type="number" step="0.10" value="{{ativo.preco_max}}">
+       <input name="preco_max" class="form-control type="number" step="0.10" value="{{ativo.preco_max}}">
        <div>Preço Minimo:</div> 
-       <input name="preco_min" type="number" step="0.10" value="{{ativo.preco_min}}">  
+       <input name="preco_min" class="form-control type="number" step="0.10" value="{{ativo.preco_min}}">  
        <div>Intervalo de procura(min):</div> 
-       <input name="search_interval"   type="number" step="0.10" value="{{ativo.search_interval}}">
-       <input type="submit" value="Salvar "> 
-
+       <input name="search_interval"  class="form-control  type="number" step="0.10" value="{{ativo.search_interval}}">
+       <input type="submit" class="btn btn-primary mt-3" value="Salvar "> 
+        </div>
     </form>
-</body>
-</html>
+{% endblock %}
+    

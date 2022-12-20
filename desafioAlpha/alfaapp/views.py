@@ -42,7 +42,7 @@ def create_new_ativo(request,):
 def delete_ativo(request, id):
   ativo = Ativos.objects.get(sigla=id)
   ativo.switch_off_thread=True
-  ativo.save()
+  ativo.delete()
   return HttpResponseRedirect(reverse('index'))
 
 def update_ativo(request, id):
@@ -61,25 +61,29 @@ def update_ativo(request, id):
 def busca_valor_cotacao(sigla,email):
     url = f'https://brapi.dev/api/quote/{sigla}'
     r = requests.get(url)
-    ativo=Ativos.objects.get(sigla=sigla)
-    print(email)
-    data = r.json()
-    cotacao=data['results'][0]['regularMarketPrice']
-    ativo.nome=data['results'][0]['longName'] 
-    ativo.cotacao=cotacao
-    ativo.save()   
-    if(ativo.preco_max<=cotacao and  ativo.email_venda== False):
-        preco_superior(email,ativo)
-    print(ativo.search_interval) 
-    if(ativo.preco_min>=cotacao and ativo.email_compra==False):
-        preco_inferior(email,ativo)    
+    switch_off_thread=False
+    try:
+        ativo=Ativos.objects.get(sigla=sigla)
+        print(email)
+        data = r.json()
+        cotacao=data['results'][0]['regularMarketPrice']
+        ativo.nome=data['results'][0]['longName'] 
+        ativo.cotacao=cotacao
+        ativo.save()   
+        if(ativo.preco_max<=cotacao and  ativo.email_venda== False):
+            preco_superior(email,ativo)
+        print(ativo.search_interval) 
+        if(ativo.preco_min>=cotacao and ativo.email_compra==False):
+            preco_inferior(email,ativo)
+    except Ativos.DoesNotExist:            
+        switch_off_thread=True
     requisicao = cycleRequisition(ativo.search_interval*60,busca_valor_cotacao,args=(sigla,email))
     requisicao.start()
-    if ativo.switch_off_thread == True:
-        print("Desligando a thread ")
+    if switch_off_thread == True:
+        print("finally")
         requisicao.cancel()
         ativo.delete()
-        return HttpResponseRedirect(reverse('index'))
+        
 
 def preco_superior(email,ativo):
     print("olha o email de venda")

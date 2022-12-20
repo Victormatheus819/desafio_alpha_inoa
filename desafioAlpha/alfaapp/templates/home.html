@@ -1,23 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}
-    {% endblock %}</title>
-</head>
-<body>
-    
+{% extends 'base.html' %}
+{% block title %} Home de Ativos {% endblock %}
     {% block main %}
     {% if user.is_authenticated %}
-    <p>Bem vindo {{user.username  }}</p>
     <p>{{ message }}</p>
-    <ul>
+    <div class="col-9">
+        <p class="font-weight-bold"> Bem vindo {{user.username  }}</p>
+         </div>
+         {%if ativos|length == 0 %}
+         <div class="row">
+            <div class="col-12">
+            <p>Você não tem nenhum ativo cadastrado ainda</p> 
+            </div>
+        </div>
+         {%else%}
         {% for ativo in ativos %}
-            <li><a href="{% url 'update_ativo' ativo.sigla %}">{{ ativo.sigla }}</a> /<a href="{% url 'delete_ativo' ativo.sigla %}">delete</a>/ </li>
+          <div class="row">
+            <div class="col-4 mb-2">
+            <a href="{% url 'update_ativo' ativo.sigla %}">{{ ativo.sigla }}</a> 
+            </div>
+            <div class="col-4 mb-2">
+                <p>R${{ativo.cotacao}}</p> 
+                </div>
+            <div class="col-1  mb-2">
+                <a class="btn btn-danger" href="{% url 'delete_ativo' ativo.sigla %}">delete</a>
+            </div>
+        </div>  
         {% endfor %}
-    </ul>
+        {%endif%}
     <br>
-    <a href="{% url 'novo_ativo'  %}">Registrar novo ativo</a>
+    <a class="btn btn-info" href="{% url 'novo_ativo'  %}">Registrar novo ativo</a>
     {%else%}
        <a href="{% url 'login' %}">Por favor faça o login para ver a pagina</a>
     {%endif%}
@@ -25,5 +36,3 @@
     {% block footer %}
     {% endblock %}
     {% endblock %}
-</body>
-</html>
