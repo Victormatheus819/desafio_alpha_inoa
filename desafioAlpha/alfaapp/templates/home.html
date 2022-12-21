@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block title %} Home de Ativos {% endblock %}
     {% block main %}
     {% if user.is_authenticated %}
@@ -7,30 +8,51 @@
         <p class="font-weight-bold"> Bem vindo {{user.username  }}</p>
          </div>
          {%if ativos|length == 0 %}
-         <div class="row">
+         <div class="row ">
             <div class="col-12">
             <p>Você não tem nenhum ativo cadastrado ainda</p> 
             </div>
         </div>
          {%else%}
+         <div class="row  color-back-home">
+            <div class="col-3 align-middle  mt-3 ">
+            <p>Sigla</p>
+            </div>
+            <div class="col-4 align-middle  mt-3 ">
+                <p>Sigla</p>
+                </div>
+            <div class="col-2 align-middle mt-3">
+                <p>Cotação</p> 
+                </div>
+            <div class="col-12"> 
+            </div>     
+        </div>
         {% for ativo in ativos %}
-          <div class="row">
-            <div class="col-4 mb-2">
+          <div class="row  color-back-home">
+            <div class="col-3 align-middle  mt-3 ">
             <a href="{% url 'update_ativo' ativo.sigla %}">{{ ativo.sigla }}</a> 
             </div>
-            <div class="col-4 mb-2">
-                <p>R${{ativo.cotacao}}</p> 
-                </div>
-            <div class="col-1  mb-2">
-                <a class="btn btn-danger" href="{% url 'delete_ativo' ativo.sigla %}">delete</a>
+            <div class="col-4 align-middle mt-3">
+                <p>{{ativo.nome}}</p> 
             </div>
-        </div>  
+            <div class="col-3 align-middle mt-3">
+                <p>R${{ativo.cotacao}}</p> 
+            </div>
+           
+            <div class="col-1  mb-2">
+                <a class="btn btn-danger align-middle  mt-2 float-right" href="{% url 'delete_ativo' ativo.sigla %}">delete</a>
+            </div>
+            <div class="col-12"> 
+           <hr class="line">
+            </div>     
+        </div>
+        
         {% endfor %}
         {%endif%}
     <br>
     <a class="btn btn-info" href="{% url 'novo_ativo'  %}">Registrar novo ativo</a>
     {%else%}
-       <a href="{% url 'login' %}">Por favor faça o login para ver a pagina</a>
+       <a class="btn btn-light" href="{% url 'login' %}">Por favor faça o login para ver a pagina</a>
     {%endif%}
            
     {% block footer %}

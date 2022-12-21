@@ -2,14 +2,10 @@
 
  
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <title>Title</title>
-  </head>
-  <body>
-      
+ {% extends 'base.html' %}
+ {% block title %} Home de Ativos {% endblock %}
+     {% block main %}
+      {{form.errors}}
     {% if form.errors %}
     <p>Seu usuario e senha não foram achados. Por favor tente de novo.</p>
   {% endif %}
@@ -21,26 +17,23 @@
       <p>Please login to see this page.</p>
     {% endif %}
   {% endif %}
-
+  <div class="form-group">
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
+    <div class="form-group">
+      <div>Usuario:</div> 
+      <input name="username" class="form-control col-3" type="text">     
+      <div>Senha:</div> 
+      <input type="password"  name="password" id="inputPassword5" class="form-control col-3" aria-describedby="passwordHelpBlock">
+      
+      <input type="submit" class="btn btn-primary mt-3" value="Login "> 
+  </div>
   </form>
-
+ </div>
   {# Assumes you setup the password_reset view in your URLconf #}
   <p><a href="{% url 'create_user' %}">Crie um registro</a></p>
   <p><a href="{% url 'password_reset' %}">Perdeu sua senha?</a></p>     
-      
-  </body>
-  </html>
+  {% block footer %}
+    {% endblock %}
+    {% endblock %}     
+ 

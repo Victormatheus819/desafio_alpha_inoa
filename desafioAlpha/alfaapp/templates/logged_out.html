@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %} Logout {% endblock %}
+    {% block main %}
+    <p class="font-weight-bold">Deslogado!!</p>
+  <a class="btn btn-primary mt-3" href="{% url 'login'%}">Clique aqui para se logar novamente.</a>
+  {% block footer %}
+  {% endblock %}
+  {% endblock %}

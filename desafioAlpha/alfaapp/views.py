@@ -12,7 +12,11 @@ from django.core.mail import send_mail
 def home(request):
     ativos=Ativos.objects.all()
     return render(request,'home.html',{"ativos":ativos})
+from django.contrib.auth import logout as auth_logout
 
+def logout_custom(request):
+    auth_logout(request)
+    return render(request,"logged_out.html");
 def create_user(request):
    email=request.POST.get('email',False)
    password=request.POST.get('password',False)
@@ -62,6 +66,7 @@ def busca_valor_cotacao(sigla,email):
     url = f'https://brapi.dev/api/quote/{sigla}'
     r = requests.get(url)
     switch_off_thread=False
+    print(sigla)
     try:
         ativo=Ativos.objects.get(sigla=sigla)
         print(email)
@@ -69,6 +74,7 @@ def busca_valor_cotacao(sigla,email):
         cotacao=data['results'][0]['regularMarketPrice']
         ativo.nome=data['results'][0]['longName'] 
         ativo.cotacao=cotacao
+        ativo.sigla=data['results'][0]['symbol'] 
         ativo.save()   
         if(ativo.preco_max<=cotacao and  ativo.email_venda== False):
             preco_superior(email,ativo)
@@ -77,7 +83,14 @@ def busca_valor_cotacao(sigla,email):
             preco_inferior(email,ativo)
     except Ativos.DoesNotExist:            
         switch_off_thread=True
-    requisicao = cycleRequisition(ativo.search_interval*60,busca_valor_cotacao,args=(sigla,email))
+    
+    if len(Ativos.objects.filter(sigla=sigla))==0:
+        intervalo=60 
+        sigla=data['results'][0]['symbol']  
+    else:
+        intervalo=ativo.search_interval*60 
+        sigla=data['results'][0]['symbol']   
+    requisicao = cycleRequisition(intervalo,busca_valor_cotacao,args=(sigla ,email))
     requisicao.start()
     if switch_off_thread == True:
         print("finally")
