@@ -27,10 +27,18 @@ cd desafioAlpha
 ````
  python manage.py migrate
  ````
-6.Execute o comando:
+6. crie o arquivo **.env** abaixo do settings.py , para conseguir enviar os emails: 
+````
+.env
+EMAIL_HOST=<host_de_email>
+EMAIL_HOST_USER=<endereco_de_email>
+EMAIL_HOST_PASSWORD=<senha_do_aplicativo_de_email>
+
+````
+8.Execute o comando:
 ````
 python manage.py runserver
 ````
 
-7.Acesse a url em seu navegador:  
+8.Acesse a url em seu navegador:  
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
