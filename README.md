@@ -35,7 +35,7 @@ EMAIL_HOST_USER=<endereco_de_email>
 EMAIL_HOST_PASSWORD=<senha_do_aplicativo_de_email>
 
 ````
-8.Execute o comando:
+7.Execute o comando:
 ````
 python manage.py runserver
 ````
