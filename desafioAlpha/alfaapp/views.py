@@ -7,8 +7,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .timer import cycleRequisition
+from .threading_dict import thread_dictionary
 from django.core.mail import send_mail
 # Create your views here.
+req__dictionary=thread_dictionary()
 def home(request):
     ativos=Ativos.objects.all()
     return render(request,'home.html',{"ativos":ativos})
@@ -21,7 +23,6 @@ def create_user(request):
    email=request.POST.get('email',False)
    password=request.POST.get('password',False)
    username=request.POST.get('username',False)
-   print(username)
    if username!=False:
     user = User.objects.create_user(email =email, username=username, password =password)
     user.save() 
@@ -37,7 +38,7 @@ def create_new_ativo(request,):
         modelAtivo=Ativos.objects.filter(sigla=sigla)
         if len(modelAtivo) == 0:
              ativo.save()
-             busca_valor_cotacao(sigla,email)
+             busca_valor_cotacao_inicial(sigla,email)
              return HttpResponseRedirect(reverse('index'))
         else:
              return render(request,'ativo_form.html',{"message":f'Ativo {sigla} já  existente em sua conta'})    
@@ -62,14 +63,30 @@ def update_ativo(request, id):
     
     return render(request,'update_ativo.html',{'ativo': ativo})
     
+def busca_valor_cotacao_inicial(sigla,email):
+    url = f'https://brapi.dev/api/quote/{sigla}'
+    r = requests.get(url)
+    ativo=Ativos.objects.get(sigla=sigla)
+    data = r.json()
+    cotacao=data['results'][0]['regularMarketPrice']
+    ativo.nome=data['results'][0]['longName'] 
+    ativo.cotacao=cotacao
+    ativo.sigla=data['results'][0]['symbol'] 
+    ativo.save()   
+    if(ativo.preco_max<=cotacao and  ativo.email_venda== False):
+        preco_superior(email,ativo)
+    if(ativo.preco_min>=cotacao and ativo.email_compra==False):
+        preco_inferior(email,ativo)            
+    requisicao = cycleRequisition(ativo.search_interval*60,busca_valor_cotacao,args=(sigla ,email))
+    req__dictionary.add(sigla,requisicao)
+    requisicao.start()
+   
 def busca_valor_cotacao(sigla,email):
     url = f'https://brapi.dev/api/quote/{sigla}'
     r = requests.get(url)
-    switch_off_thread=False
     print(sigla)
     try:
         ativo=Ativos.objects.get(sigla=sigla)
-        print(email)
         data = r.json()
         cotacao=data['results'][0]['regularMarketPrice']
         ativo.nome=data['results'][0]['longName'] 
@@ -78,25 +95,11 @@ def busca_valor_cotacao(sigla,email):
         ativo.save()   
         if(ativo.preco_max<=cotacao and  ativo.email_venda== False):
             preco_superior(email,ativo)
-        print(ativo.search_interval) 
         if(ativo.preco_min>=cotacao and ativo.email_compra==False):
             preco_inferior(email,ativo)
     except Ativos.DoesNotExist:            
-        switch_off_thread=True
-    
-    if len(Ativos.objects.filter(sigla=sigla))==0:
-        intervalo=60 
-        sigla=data['results'][0]['symbol']  
-    else:
-        intervalo=ativo.search_interval*60 
-        sigla=data['results'][0]['symbol']   
-    requisicao = cycleRequisition(intervalo,busca_valor_cotacao,args=(sigla ,email))
-    requisicao.start()
-    if switch_off_thread == True:
-        print("finally")
-        requisicao.cancel()
-        ativo.delete()
-        
+         req__dictionary[sigla].cancel()
+         del req__dictionary[sigla]
 
 def preco_superior(email,ativo):
     print("olha o email de venda")

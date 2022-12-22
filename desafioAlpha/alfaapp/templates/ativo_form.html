@@ -5,13 +5,13 @@
     <form action="{% url 'novo_ativo'%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-            <div>Sigla:</div> 
+            <div><p class="font-weight-bold">Sigla:</p></div> 
             <input name="sigla" class="form-control sigla " type="text">     
-            <div>Preço Maximo:</div> 
+            <div><p class="font-weight-bold">Preco máximo:</p></div> 
             <input name="preco_max" class="form-control" type="number" step="0.10" value="{{ativo.preco_max}}">
-            <div>Preço Minimo:</div> 
+            <div><p class="font-weight-bold">Preco minimo:</p></div> 
              <input name="preco_min" class="form-control" type="number" step="0.10" value="{{ativo.preco_min}}">  
-            <div>Intervalo de procura(min):</div> 
+            <div><p class="font-weight-bold">Intervalo de procura(min):</p></div> 
             <input name="search_interval"  class="form-control  type="number" step="0.10" value="{{ativo.search_interval}}">
             <input type="submit" class="btn btn-primary mt-3" value="Salvar "> 
         </div>
